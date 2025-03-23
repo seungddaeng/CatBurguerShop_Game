@@ -1,5 +1,10 @@
 package edu.upb.lp.progra.catBurgerShop;
 
+import android.content.SharedPreferences;
+import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -20,7 +25,7 @@ public class CatBurgerShopModel {
     private Stack<String> hamborguesaDeseada = new Stack<>();
     private Stack<String> hamborguesaConstruida = new Stack<>();
     private GameTimer timer;
-
+    private final Handler handler = new Handler(Looper.getMainLooper());
     public CatBurgerShopModel(CatBurgerShopController controller) {
         this.controller = controller;
         colaDeGatitos();
@@ -28,10 +33,15 @@ public class CatBurgerShopModel {
     }
     private void initializeTimer() {
         timer = new GameTimer(20, () -> {
-            gameOver = true;
-            controller.gameOver();
+            // Ejecutar en el hilo principal
+            handler.post(() -> {
+                gameOver = true;
+                gameOver(); // Guardar puntajes
+                controller.gameOver(); // Mostrar pantalla de "gameover"
+            });
         }, () -> {
-            controller.actualizarTiempo(timer.getTimeLeft());
+            // Ejecutar en el hilo principal
+            handler.post(() -> controller.actualizarTiempo(timer.getTimeLeft()));
         });
     }
     public void startTimer() {
@@ -139,6 +149,38 @@ public class CatBurgerShopModel {
         hamborguesaDeseada.clear();
     }
 
+    public void gameOver() {
+        // Guardar el puntaje actual si es mayor que alguno de los puntajes guardados
+        SharedPreferences prefs = controller.getView().getContext().getSharedPreferences("CatBurgerShop", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        // Obtener los puntajes actuales
+        int score1 = prefs.getInt("score1", 0);
+        int score2 = prefs.getInt("score2", 0);
+        int score3 = prefs.getInt("score3", 0);
+
+        // Actualizar los puntajes si el nuevo score es mayor
+        if (score > score1) {
+            editor.putInt("score3", score2);
+            editor.putInt("score2", score1);
+            editor.putInt("score1", score);
+        } else if (score > score2) {
+            editor.putInt("score3", score2);
+            editor.putInt("score2", score);
+        } else if (score > score3) {
+            editor.putInt("score3", score);
+        }
+
+        editor.apply(); // Guardar los cambios
+
+        // Log para verificar que el método se está llamando
+        System.out.println("Game Over! Puntaje guardado: " + score);
+
+        // Llamar al controlador para mostrar la pantalla de "gameover"
+        controller.gameOver();
+    }
+
+
     private void incrementarScore() {
         score++;
         controller.actualizarScore(score);
@@ -159,6 +201,7 @@ public class CatBurgerShopModel {
         if (score < 0) {
             gameOver = true;
             gatoEnPantalla.pararGato();
+            gameOver();
             controller.gameOver();
         }
     }

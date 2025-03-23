@@ -1,5 +1,6 @@
 package edu.upb.lp.progra.adapterFiles;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 
 /**
@@ -12,8 +13,10 @@ import android.content.SharedPreferences;
  * @author Jordi Ugarte
  */
 public interface AndroidLibrary {
-	SharedPreferences getSharedPreferences();
+	Context getContext();
+	void setOnCellClickListener(int vertical, int horizontal, Runnable onClick);
 
+	SharedPreferences getSharedPreferences();
 	/**
 	 * Configure the whole screen
 	 * 

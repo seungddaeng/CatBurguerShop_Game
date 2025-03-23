@@ -1,9 +1,12 @@
 package edu.upb.lp.progra.catBurgerShop;
 
+import android.os.Handler;
+import android.os.Looper;
+
 public class CatBurgerShopController {
     private CatBurgerShopView view;
     private CatBurgerShopModel model;
-
+    private final Handler handler = new Handler(Looper.getMainLooper());
     public void mostrarEstadoGatito(String estado) {
         view.mostrarEstadoGatito(estado);
     }
@@ -29,7 +32,9 @@ public class CatBurgerShopController {
     public CatBurgerShopModel getModel() {
         return model;
     }
-
+    public CatBurgerShopView getView() {
+        return view;
+    }
     public void comparashon() {
         model.comparashon();
     }
@@ -80,9 +85,9 @@ public class CatBurgerShopController {
     }
 
     public void gameOver() {
-        view.gameOver();
+        // Ejecutar en el hilo principal
+        handler.post(() -> view.gameOver());
     }
-
     public void desclickIngredientes(int horizontal) {
         view.desclickIngredientes(horizontal);
     }

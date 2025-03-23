@@ -1,5 +1,9 @@
 package edu.upb.lp.progra.catBurgerShop;
 
+import android.content.Context;
+import android.content.Intent;
+
+import edu.upb.lp.androidInternalFiles.StartActivity;
 import edu.upb.lp.progra.adapterFiles.AndroidLibrary;
 import edu.upb.lp.progra.adapterFiles.AppConnector;
 
@@ -138,15 +142,31 @@ public class CatBurgerShopView implements AppConnector {
     }
 
     public void gameOver() {
+        // Configurar la pantalla de "gameover"
         library.configureScreen(1, 1, 0, 0, false, 0);
         library.setImageOnCell(0, 0, "gameover");
+
+        // Hacer que la celda de "gameover" sea clickeable
+        library.setOnCellClickListener(0, 0, () -> {
+            // Ir a StartActivity
+            Context context = library.getContext();
+            Intent intent = new Intent(context, StartActivity.class);
+            context.startActivity(intent);
+        });
     }
 
     public void reinicio() {
-        controller.reiniciarJuego();
+        // Reiniciar la interfaz de usuario
+        library.configureScreen(1, 1, 0, 0, false, 0);
+        library.setImageOnCell(0, 0, "catburgershop");
+
+        // No llamar a reiniciarJuego() aquí
     }
     public void actualizarTiempo(int tiempo) {
         library.setTextOnCell(0, 1, "Time: " + tiempo);
+    }
+    public Context getContext() {
+        return library.getContext(); // Usa el método getContext() de AndroidLibrary
     }
     public CatBurgerShopController getController() {
         return controller;

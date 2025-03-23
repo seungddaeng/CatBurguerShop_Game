@@ -1,16 +1,21 @@
 package edu.upb.lp.progra.catBurgerShop;
 
+import android.os.Handler;
+import android.os.Looper;
+
 public class GameTimer {
     private int timeLeft;
     private Runnable onTimerEnd;
     private Runnable onTick;
     private boolean running;
+    private Handler handler;
 
     public GameTimer(int initialTime, Runnable onTimerEnd, Runnable onTick) {
         this.timeLeft = initialTime;
         this.onTimerEnd = onTimerEnd;
         this.onTick = onTick;
         this.running = false;
+        this.handler = new Handler(Looper.getMainLooper()); // Usar el hilo principal
     }
 
     public void start() {
@@ -26,19 +31,11 @@ public class GameTimer {
         if (running) {
             if (timeLeft > 0) {
                 timeLeft--;
-                onTick.run();
+                handler.post(onTick); // Ejecutar onTick en el hilo principal
                 // Ejecutar el siguiente tick después de 1 segundo
-                new java.util.Timer().schedule(
-                        new java.util.TimerTask() {
-                            @Override
-                            public void run() {
-                                tick();
-                            }
-                        },
-                        1000
-                );
+                handler.postDelayed(this::tick, 1000);
             } else {
-                onTimerEnd.run();
+                handler.post(onTimerEnd); // Ejecutar onTimerEnd en el hilo principal
             }
         }
     }

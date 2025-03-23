@@ -61,8 +61,19 @@ public class AndroidGameActivity extends Activity implements AndroidLibrary,
 
 	private final MediaPlayer[] mp = new MediaPlayer[10];
 	@Override
+	public Context getContext() {
+		return this;
+	}
+
+	@Override
 	public SharedPreferences getSharedPreferences() {
-		return prefs;
+		return getSharedPreferences("CatBurgerShop", MODE_PRIVATE);
+	}
+	@Override
+	public void setOnCellClickListener(int vertical, int horizontal, Runnable onClick) {
+		TableRow row = (TableRow) table.getChildAt(vertical);
+		View cell = row.getChildAt(horizontal);
+		cell.setOnClickListener(v -> onClick.run());
 	}
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

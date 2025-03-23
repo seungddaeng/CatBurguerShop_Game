@@ -20,7 +20,6 @@ public class StartActivity extends Activity {
 
         prefs = getSharedPreferences("CatBurgerShop", MODE_PRIVATE);
 
-        // Casting explícito a Button
         Button startButton = (Button) findViewById(R.id.startButton);
         Button scoreButton = (Button) findViewById(R.id.scoreButton);
 
@@ -29,13 +28,18 @@ public class StartActivity extends Activity {
             startActivity(intent);
         });
 
-        scoreButton.setOnClickListener(v -> {
-            int score1 = prefs.getInt("score1", 0);
-            int score2 = prefs.getInt("score2", 0);
-            int score3 = prefs.getInt("score3", 0);
+//        scoreButton.setOnClickListener(v -> {
+//            int score1 = prefs.getInt("score1", 0);
+//            int score2 = prefs.getInt("score2", 0);
+//            int score3 = prefs.getInt("score3", 0);
+//
+//            String scores = "Score 1: " + score1 + "\nScore 2: " + score2 + "\nScore 3: " + score3;
+//            TextView title = (TextView) findViewById(R.id.title); // Casting a TextView            title.setText(scores);
+//        });
 
-            String scores = "Score 1: " + score1 + "\nScore 2: " + score2 + "\nScore 3: " + score3;
-            TextView title = (TextView) findViewById(R.id.title); // Casting a TextView            title.setText(scores);
+        scoreButton.setOnClickListener(v -> {
+            Intent intent = new Intent(StartActivity.this, ScoresActivity.class);
+            startActivity(intent); // Abrir ScoresActivity
         });
     }
 }
