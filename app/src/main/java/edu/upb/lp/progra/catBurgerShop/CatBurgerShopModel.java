@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,9 +36,7 @@ public class CatBurgerShopModel {
         timer = new GameTimer(20, () -> {
             // Ejecutar en el hilo principal
             handler.post(() -> {
-                gameOver = true;
-                gameOver(); // Guardar puntajes
-                controller.gameOver(); // Mostrar pantalla de "gameover"
+                gameOver = true;// Mostrar pantalla de "gameover" TODO
             });
         }, () -> {
             // Ejecutar en el hilo principal
@@ -137,8 +136,10 @@ public class CatBurgerShopModel {
         if (ingredientesEstanCorrectos) {
             timer.stop();
             timer = new GameTimer(20, () -> {
+                System.out.println("perdiste q boluuu");
                 gameOver = true;
                 controller.gameOver();
+                gameOver();
             }, () -> {
                 controller.actualizarTiempo(timer.getTimeLeft());
             });
@@ -150,6 +151,7 @@ public class CatBurgerShopModel {
     }
 
     public void gameOver() {
+        System.out.println("guardandoo");
         SharedPreferences prefs = controller.getView().getContext().getSharedPreferences("CatBurgerShop", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
@@ -171,6 +173,7 @@ public class CatBurgerShopModel {
         editor.apply();
 
         System.out.println("Game Over! Puntaje guardado: " + score);
+        System.out.println( "Puntajes guardados: " + score1 + ", " + score2 + ", " + score3);
 
         controller.gameOver();
     }
@@ -196,7 +199,6 @@ public class CatBurgerShopModel {
         if (score < 0) {
             gameOver = true;
             gatoEnPantalla.pararGato();
-            gameOver();
             controller.gameOver();
         }
     }
