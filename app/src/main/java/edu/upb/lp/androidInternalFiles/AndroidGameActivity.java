@@ -215,18 +215,24 @@ public class AndroidGameActivity extends Activity implements AndroidLibrary,
 
 	@Override
 	public void setImageOnCell(int vertical, int horizontal, String image) {
-		TableRow row = (TableRow) table.getChildAt(vertical);
-		if (row == null) {
-			throw new IndexOutOfBoundsException("Wrong vertical coordinate " + vertical + ", actual range is (0,"+table.getChildCount()+")");
+			this.runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					// Tu código
+					TableRow row = (TableRow) table.getChildAt(vertical);
+					if (row == null) {
+						throw new IndexOutOfBoundsException("Wrong vertical coordinate " + vertical + ", actual range is (0,"+table.getChildCount()+")");
+					}
+					TextView view = (TextView) row.getChildAt(horizontal);
+					if (view == null) {
+						throw new IndexOutOfBoundsException("Wrong horizontal coordinate " + horizontal + ", actual range is (0,"+row.getChildCount()+")");
+					}
+					int id = getResources().getIdentifier(image, "drawable",
+							getPackageName());
+					view.setBackgroundResource(id);
+				}
+			});
 		}
-		TextView view = (TextView) row.getChildAt(horizontal);
-		if (view == null) {
-			throw new IndexOutOfBoundsException("Wrong horizontal coordinate " + horizontal + ", actual range is (0,"+row.getChildCount()+")");
-		}
-		int id = getResources().getIdentifier(image, "drawable",
-				getPackageName());
-		view.setBackgroundResource(id);
-	}
 
 	/**
 	 * Generate a value suitable for use in {setId(int)}. This value will
@@ -276,62 +282,72 @@ public class AndroidGameActivity extends Activity implements AndroidLibrary,
 
 	@Override
 	public void configureScreen(int numberOfRows, int numberOfColumns,
-			int verticalSpacing, int horizontalSpacing, boolean vertical, double proportion) {
-		table.removeAllViews();
+								int verticalSpacing, int horizontalSpacing, boolean vertical, double proportion) {
 
-		TableRow.LayoutParams normalCellParams = new TableRow.LayoutParams();
-		normalCellParams.rightMargin = dpToPixel(horizontalSpacing);
-		normalCellParams.height = android.widget.TableRow.LayoutParams.MATCH_PARENT;
-		normalCellParams.width = 0;
-		normalCellParams.weight = 1;
+		// Usa el contexto de la actividad actual (AndroidGameActivity) en lugar de 'this'
+		final Context context = AndroidGameActivity.this;
 
-		TableRow.LayoutParams rightmostCellParams = new TableRow.LayoutParams();
-		rightmostCellParams.height = android.widget.TableRow.LayoutParams.MATCH_PARENT;
-		rightmostCellParams.width = 0;
-		rightmostCellParams.weight = 1;
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				table.removeAllViews();
 
-		TableLayout.LayoutParams rowParams = new TableLayout.LayoutParams();
-		rowParams.height = 0;
-		rowParams.weight = 1;
+				TableRow.LayoutParams normalCellParams = new TableRow.LayoutParams();
+				normalCellParams.rightMargin = dpToPixel(horizontalSpacing);
+				normalCellParams.height = android.widget.TableRow.LayoutParams.MATCH_PARENT;
+				normalCellParams.width = 0;
+				normalCellParams.weight = 1;
 
-		for (int j = 0; j < numberOfRows; j++) {
-			TableRow row = new TableRow(this);
-			row.setPadding(0, verticalSpacing, 0, verticalSpacing);
-			row.setGravity(Gravity.CENTER);
-			row.setLayoutParams(rowParams);
-			for (int i = 0; i < numberOfColumns; i++) {
-				MyTextView view = new MyTextView(this);
-				view.setText("");
-				view.setTextSize(20);
-				view.setOnClickListener(this);
-				view.setCoords(i, j);
-				view.setGravity(Gravity.CENTER);
-				view.setSoundEffectsEnabled(false);
-				if (i < numberOfColumns - 1) {
-					view.setLayoutParams(normalCellParams);
-				} else {
-					view.setLayoutParams(rightmostCellParams);
+				TableRow.LayoutParams rightmostCellParams = new TableRow.LayoutParams();
+				rightmostCellParams.height = android.widget.TableRow.LayoutParams.MATCH_PARENT;
+				rightmostCellParams.width = 0;
+				rightmostCellParams.weight = 1;
+
+				TableLayout.LayoutParams rowParams = new TableLayout.LayoutParams();
+				rowParams.height = 0;
+				rowParams.weight = 1;
+
+				for (int j = 0; j < numberOfRows; j++) {
+					TableRow row = new TableRow(context);  // Usa el contexto correcto aquí
+					row.setPadding(0, verticalSpacing, 0, verticalSpacing);
+					row.setGravity(Gravity.CENTER);
+					row.setLayoutParams(rowParams);
+					for (int i = 0; i < numberOfColumns; i++) {
+						MyTextView view = new MyTextView(context);  // Usa el contexto correcto aquí
+						view.setText("");
+						view.setTextSize(20);
+						view.setOnClickListener(AndroidGameActivity.this);  // Usa el contexto correcto para el onClick
+						view.setCoords(i, j);
+						view.setGravity(Gravity.CENTER);
+						view.setSoundEffectsEnabled(false);
+						if (i < numberOfColumns - 1) {
+							view.setLayoutParams(normalCellParams);
+						} else {
+							view.setLayoutParams(rightmostCellParams);
+						}
+						row.addView(view);
+					}
+					table.addView(row);
 				}
-				row.addView(view);
+
+				if (vertical) {
+					setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+				} else {
+					setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+				}
+
+				LinearLayout.LayoutParams tableParams = new LinearLayout.LayoutParams(
+						LinearLayout.LayoutParams.MATCH_PARENT, 0,
+						(float) (1 - proportion));
+				table.setLayoutParams(tableParams);
+
+				LinearLayout.LayoutParams bottomParams = new LinearLayout.LayoutParams(
+						LinearLayout.LayoutParams.MATCH_PARENT, 0, (float) proportion);
+				bottomSection.setLayoutParams(bottomParams);
 			}
-			table.addView(row);
-		}
-
-		if (vertical){
-			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);			
-		} else {
-			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);			
-		}
-		
-		LinearLayout.LayoutParams tableParams = new LinearLayout.LayoutParams(
-				LinearLayout.LayoutParams.MATCH_PARENT, 0,
-				(float) (1 - proportion));
-		table.setLayoutParams(tableParams);
-
-		LinearLayout.LayoutParams bottomParams = new LinearLayout.LayoutParams(
-				LinearLayout.LayoutParams.MATCH_PARENT, 0, (float) proportion);
-		bottomSection.setLayoutParams(bottomParams);
+		});
 	}
+
 
 	@Override
 	public void reproduceSound(String s) {
