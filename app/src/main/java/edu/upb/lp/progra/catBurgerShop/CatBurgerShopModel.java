@@ -150,16 +150,13 @@ public class CatBurgerShopModel {
     }
 
     public void gameOver() {
-        // Guardar el puntaje actual si es mayor que alguno de los puntajes guardados
         SharedPreferences prefs = controller.getView().getContext().getSharedPreferences("CatBurgerShop", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
-        // Obtener los puntajes actuales
         int score1 = prefs.getInt("score1", 0);
         int score2 = prefs.getInt("score2", 0);
         int score3 = prefs.getInt("score3", 0);
 
-        // Actualizar los puntajes si el nuevo score es mayor
         if (score > score1) {
             editor.putInt("score3", score2);
             editor.putInt("score2", score1);
@@ -171,12 +168,10 @@ public class CatBurgerShopModel {
             editor.putInt("score3", score);
         }
 
-        editor.apply(); // Guardar los cambios
+        editor.apply();
 
-        // Log para verificar que el método se está llamando
         System.out.println("Game Over! Puntaje guardado: " + score);
 
-        // Llamar al controlador para mostrar la pantalla de "gameover"
         controller.gameOver();
     }
 
