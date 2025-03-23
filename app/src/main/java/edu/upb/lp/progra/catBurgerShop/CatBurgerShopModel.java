@@ -26,7 +26,11 @@ public class CatBurgerShopModel {
     }
 
     public void colaDeGatitos() {
-        colaDeGatos.offer(new GatitoFuegoDecorator(new GatoBase(controller, 1)));
+        GatitoFuegoDecorator fuego = new GatitoFuegoDecorator(new GatoBase(controller, 1));
+        Jugador jugador = new Jugador("Player", controller);
+        fuego.agregarObservador(jugador);
+
+        colaDeGatos.offer(fuego);
         colaDeGatos.offer(new GatitoGorritoDecorator(new GatoBase(controller, 2)));
         colaDeGatos.offer(new GatitoLentecitosDecorator(new GatoBase(controller, 3)));
         colaDeGatos.offer(new GatitoVerdecitoDecorator(new GatoBase(controller, 4)));

@@ -7,6 +7,26 @@ public class CatBurgerShopView implements AppConnector {
     private AndroidLibrary library;
     private CatBurgerShopController controller;
 
+    private String mensajeEstado = "";
+
+
+    public void mostrarEstadoGatito(String estado) {
+        String[] partes = estado.split("", 2);
+        String linea1 = partes.length > 0 ? partes[0] + "" : "";
+        String linea2 = partes.length > 1 ? partes[1] : "";
+
+
+        library.setTextOnCell(0, 1, linea1);
+        library.setTextOnCell(0, 2, linea2);
+
+
+        executeLater(() -> {
+            library.setTextOnCell(0, 1, "");
+            library.setTextOnCell(0, 2, "");
+            mensajeEstado = "";
+        }, 2000);
+    }
+
     public CatBurgerShopView(AndroidLibrary library) {
         this.library = library;
         this.controller = new CatBurgerShopController(this);

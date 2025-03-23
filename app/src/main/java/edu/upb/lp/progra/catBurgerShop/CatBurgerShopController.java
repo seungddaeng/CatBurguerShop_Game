@@ -4,6 +4,10 @@ public class CatBurgerShopController {
     private CatBurgerShopView view;
     private CatBurgerShopModel model;
 
+    public void mostrarEstadoGatito(String estado) {
+        view.mostrarEstadoGatito(estado);
+    }
+
     public CatBurgerShopController(CatBurgerShopView view) {
         this.view = view;
         this.model = new CatBurgerShopModel(this);
