@@ -166,7 +166,7 @@ public class CatBurgerShopView implements AppConnector {
         library.setTextOnCell(0, 1, "Time: " + tiempo);
     }
     public Context getContext() {
-        return library.getContext(); // Usa el método getContext() de AndroidLibrary
+        return library.getContext();
     }
     public CatBurgerShopController getController() {
         return controller;
