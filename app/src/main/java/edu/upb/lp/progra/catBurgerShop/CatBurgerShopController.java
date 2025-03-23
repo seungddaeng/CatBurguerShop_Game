@@ -26,13 +26,23 @@ public class CatBurgerShopController {
     }
 
     //metodos de model
+    public CatBurgerShopModel getModel() {
+        return model;
+    }
 
     public void comparashon() {
         model.comparashon();
     }
+    public void actualizarTiempo(int tiempo) {
+        view.actualizarTiempo(tiempo);
+    }
 
     public void quitarPuntos(){
         model.quitarPuntos();
+    }
+
+    public boolean isGameOver() {
+        return model.isGameOver();
     }
 
     //metodos de view

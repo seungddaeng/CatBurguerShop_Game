@@ -19,10 +19,27 @@ public class CatBurgerShopModel {
     private GatoPrincipal gatoEnPantalla = null;
     private Stack<String> hamborguesaDeseada = new Stack<>();
     private Stack<String> hamborguesaConstruida = new Stack<>();
+    private GameTimer timer;
 
     public CatBurgerShopModel(CatBurgerShopController controller) {
         this.controller = controller;
         colaDeGatitos();
+        initializeTimer();
+    }
+    private void initializeTimer() {
+        timer = new GameTimer(20, () -> {
+            gameOver = true;
+            controller.gameOver();
+        }, () -> {
+            controller.actualizarTiempo(timer.getTimeLeft());
+        });
+    }
+    public void startTimer() {
+        timer.start();
+    }
+
+    public void stopTimer() {
+        timer.stop();
     }
 
     public void colaDeGatitos() {
@@ -35,7 +52,9 @@ public class CatBurgerShopModel {
         colaDeGatos.offer(new GatitoLentecitosDecorator(new GatoBase(controller, 3)));
         colaDeGatos.offer(new GatitoVerdecitoDecorator(new GatoBase(controller, 4)));
     }
-
+    public boolean isGameOver() {
+        return gameOver;
+    }
     public void clic(int vertical, int horizontal) throws TeQuisistePasarDeListoYNoPudisteException {
         // Verificamos el tamaño de la hamburguesa aquí
         if (hamborguesaConstruida.size() < 10) {
@@ -74,7 +93,7 @@ public class CatBurgerShopModel {
         hamborguesaConstruida.push(ingredientes.get(horizontal));
 
         controller.clickIngredientes(horizontal);
-        controller.executeLater(new DesclickeadorDeIngredientes(this, horizontal), 300);
+        controller.executeLater(new DesclickeadorDeIngredientes(this, horizontal), 200);
     }
 
 
@@ -103,6 +122,19 @@ public class CatBurgerShopModel {
             hamborguesaConstruida.pop();
             hamborguesaDeseada.pop();
         }
+
+        // Si el pedido fue correcto, reiniciar el temporizador
+        if (ingredientesEstanCorrectos) {
+            timer.stop();
+            timer = new GameTimer(20, () -> {
+                gameOver = true;
+                controller.gameOver();
+            }, () -> {
+                controller.actualizarTiempo(timer.getTimeLeft());
+            });
+            timer.start();
+        }
+
         hamborguesaConstruida.clear();
         hamborguesaDeseada.clear();
     }

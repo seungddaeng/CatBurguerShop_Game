@@ -1,5 +1,7 @@
 package edu.upb.lp.progra.adapterFiles;
 
+import android.content.SharedPreferences;
+
 /**
  * This interface shows all methods available for clients in the Android library
  * for graphical interaction with the user.
@@ -10,6 +12,7 @@ package edu.upb.lp.progra.adapterFiles;
  * @author Jordi Ugarte
  */
 public interface AndroidLibrary {
+	SharedPreferences getSharedPreferences();
 
 	/**
 	 * Configure the whole screen

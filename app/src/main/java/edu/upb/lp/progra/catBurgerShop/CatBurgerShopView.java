@@ -39,7 +39,12 @@ public class CatBurgerShopView implements AppConnector {
 
     @Override
     public void onCellPressed(int vertical, int horizontal) {
-        controller.handleCellClick(vertical, horizontal);
+        if (controller.isGameOver()) {
+            // Si el juego ha terminado, reiniciar al hacer clic en cualquier parte
+            controller.reiniciarJuego();
+        } else {
+            controller.handleCellClick(vertical, horizontal);
+        }
     }
 
     @Override
@@ -56,6 +61,7 @@ public class CatBurgerShopView implements AppConnector {
             }
         }
         library.setTextOnCell(0, 0, "Score: 0");
+        controller.getModel().startTimer();
     }
 
     public void clickIngredientes(int horizontal) {
@@ -139,7 +145,9 @@ public class CatBurgerShopView implements AppConnector {
     public void reinicio() {
         controller.reiniciarJuego();
     }
-
+    public void actualizarTiempo(int tiempo) {
+        library.setTextOnCell(0, 1, "Time: " + tiempo);
+    }
     public CatBurgerShopController getController() {
         return controller;
     }

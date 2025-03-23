@@ -60,7 +60,10 @@ public class AndroidGameActivity extends Activity implements AndroidLibrary,
 	private AppConnector userUI;
 
 	private final MediaPlayer[] mp = new MediaPlayer[10];
-
+	@Override
+	public SharedPreferences getSharedPreferences() {
+		return prefs;
+	}
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
