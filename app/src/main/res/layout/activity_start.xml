@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@color/background_start">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cat Burger Shop"
+        android:textSize="30sp"
+        android:textColor="@color/white"
+        android:layout_marginBottom="20dp"/>
+
+    <Button
+        android:id="@+id/startButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start Game"
+        android:textSize="20sp"
+        android:padding="10dp"
+        android:background="@color/button_background"
+        android:textColor="@color/button_text"/>
+
+    <Button
+        android:id="@+id/scoreButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="View Scores"
+        android:textSize="20sp"
+        android:padding="10dp"
+        android:background="@color/button_background"
+        android:textColor="@color/button_text"
+        android:layout_marginTop="10dp"/>
+
+</LinearLayout>
