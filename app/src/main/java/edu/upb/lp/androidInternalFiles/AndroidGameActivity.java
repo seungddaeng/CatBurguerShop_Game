@@ -194,11 +194,17 @@ public class AndroidGameActivity extends Activity implements AndroidLibrary,
 	}
 
 	@Override
-	public void setTextOnCell(int vertical, int horizontal, String text) {
-		TableRow row = (TableRow) table.getChildAt(vertical);
-		TextView view = (TextView) row.getChildAt(horizontal);
-		view.setText(text);
+	public void setTextOnCell(final int vertical, final int horizontal, final String text) {
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				TableRow row = (TableRow) table.getChildAt(vertical);
+				TextView view = (TextView) row.getChildAt(horizontal);
+				view.setText(text);
+			}
+		});
 	}
+
 
 	@Override
 	public void setTextSizeOnCell(int vertical, int horizontal, int size) {
