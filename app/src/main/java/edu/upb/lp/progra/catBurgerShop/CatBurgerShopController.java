@@ -85,7 +85,6 @@ public class CatBurgerShopController {
     }
 
     public void gameOver() {
-        // Ejecutar en el hilo principal
         handler.post(() -> view.gameOver());
     }
     public void desclickIngredientes(int horizontal) {
