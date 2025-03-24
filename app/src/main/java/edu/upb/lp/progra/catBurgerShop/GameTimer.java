@@ -15,7 +15,7 @@ public class GameTimer {
         this.onTimerEnd = onTimerEnd;
         this.onTick = onTick;
         this.running = false;
-        this.handler = new Handler(Looper.getMainLooper()); // Usar el hilo principal
+        this.handler = new Handler(Looper.getMainLooper());
     }
 
     public void start() {
@@ -31,11 +31,10 @@ public class GameTimer {
         if (running) {
             if (timeLeft > 0) {
                 timeLeft--;
-                handler.post(onTick); // Ejecutar onTick en el hilo principal
-                // Ejecutar el siguiente tick después de 1 segundo
+                handler.post(onTick);
                 handler.postDelayed(this::tick, 1000);
             } else {
-                handler.post(onTimerEnd); // Ejecutar onTimerEnd en el hilo principal
+                handler.post(onTimerEnd);
             }
         }
     }

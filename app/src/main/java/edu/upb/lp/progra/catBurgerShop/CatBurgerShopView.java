@@ -38,13 +38,11 @@ public class CatBurgerShopView implements AppConnector {
 
     @Override
     public void onButtonPressed(String name) {
-        // No se usa en este juego
     }
 
     @Override
     public void onCellPressed(int vertical, int horizontal) {
         if (controller.isGameOver()) {
-            // Si el juego ha terminado, reiniciar al hacer clic en cualquier parte
             controller.reiniciarJuego();
         } else {
             controller.handleCellClick(vertical, horizontal);
@@ -92,7 +90,7 @@ public class CatBurgerShopView implements AppConnector {
 
     public void ready(int v, int h) {
         library.setImageOnCell(2, h, "preparing");
-        controller.comparashon(); // El controlador lo maneja
+        controller.comparashon();
     }
 
     public void dibujarGatito(int v, int h, int valor) {
@@ -142,13 +140,10 @@ public class CatBurgerShopView implements AppConnector {
     }
 
     public void gameOver() {
-        // Configurar la pantalla de "gameover"
         library.configureScreen(1, 1, 0, 0, false, 0);
         library.setImageOnCell(0, 0, "gameover");
 
-        // Hacer que la celda de "gameover" sea clickeable
         library.setOnCellClickListener(0, 0, () -> {
-            // Ir a StartActivity
             Context context = library.getContext();
             Intent intent = new Intent(context, StartActivity.class);
             context.startActivity(intent);
@@ -156,11 +151,8 @@ public class CatBurgerShopView implements AppConnector {
     }
 
     public void reinicio() {
-        // Reiniciar la interfaz de usuario
         library.configureScreen(1, 1, 0, 0, false, 0);
         library.setImageOnCell(0, 0, "catburgershop");
-
-        // No llamar a reiniciarJuego() aquí
     }
     public void actualizarTiempo(int tiempo) {
         library.setTextOnCell(0, 1, "Time: " + tiempo);

@@ -7,6 +7,5 @@ public class GatoBase extends GatoPrincipal {
 
     @Override
     public void venganza() {
-        // Comportamiento base (no hace nada)
     }
 }

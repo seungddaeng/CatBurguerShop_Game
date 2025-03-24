@@ -21,19 +21,15 @@ public abstract class GatoPrincipal {
     }
 
     public void moverAIzquierda() {
-        // Primero borra el gatito anterior
         controller.borrarGatito(v, h);
 
         if (h >= 0) {
             h--;
-            // Si llegó a la posición central
             if (v == 1 && h == 3) {
                 movedor.stop();
                 controller.hacerPedido();
             }
         }
-
-        // Dibuja el nuevo gatito
         controller.dibujarGatito(v, h, valor);
     }
 

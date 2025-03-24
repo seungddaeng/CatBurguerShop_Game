@@ -34,12 +34,10 @@ public class CatBurgerShopModel {
     }
     private void initializeTimer() {
         timer = new GameTimer(20, () -> {
-            // Ejecutar en el hilo principal
             handler.post(() -> {
-                gameOver = true;// Mostrar pantalla de "gameover" TODO
+                gameOver = true;
             });
         }, () -> {
-            // Ejecutar en el hilo principal
             handler.post(() -> controller.actualizarTiempo(timer.getTimeLeft()));
         });
     }
@@ -47,9 +45,6 @@ public class CatBurgerShopModel {
         timer.start();
     }
 
-    public void stopTimer() {
-        timer.stop();
-    }
 
     public void colaDeGatitos() {
         GatitoFuegoDecorator fuego = new GatitoFuegoDecorator(new GatoBase(controller, 1));
@@ -65,7 +60,6 @@ public class CatBurgerShopModel {
         return gameOver;
     }
     public void clic(int vertical, int horizontal) throws TeQuisistePasarDeListoYNoPudisteException {
-        // Verificamos el tamaño de la hamburguesa aquí
         if (hamborguesaConstruida.size() < 10) {
             if (!gameOver) {
                 if (inicio) {
@@ -74,7 +68,7 @@ public class CatBurgerShopModel {
                     gatoEnPantalla = colaDeGatos.poll();
                     gatoEnPantalla.empezarAMoverAIzquierda();
                 } else if (vertical == 3) {
-                    manejarClickIngrediente(horizontal);  // Ya no necesitas verificar el tamaño aquí
+                    manejarClickIngrediente(horizontal);
                 }
             }
             if (vertical == 2 && horizontal == 5) {
@@ -83,14 +77,12 @@ public class CatBurgerShopModel {
                 siguienteGato();
             }
         } else {
-            // Si la hamburguesa es demasiado grande, lanzamos la excepción correspondiente
             throw new TeQuisistePasarDeListoYNoPudisteException ("La hamburguesa no puede ser tan grande >:[");
         }
     }
 
 
     private void manejarClickIngrediente(int horizontal) {
-        // Mapa de ingredientes
         Map<Integer, String> ingredientes = new HashMap<>();
         ingredientes.put(1, "palta");
         ingredientes.put(2, "pan");
@@ -98,7 +90,6 @@ public class CatBurgerShopModel {
         ingredientes.put(4, "tomate");
         ingredientes.put(5, "lechuga");
 
-        // Agregamos el ingrediente a la hamburguesa
         hamborguesaConstruida.push(ingredientes.get(horizontal));
 
         controller.clickIngredientes(horizontal);
@@ -132,7 +123,6 @@ public class CatBurgerShopModel {
             hamborguesaDeseada.pop();
         }
 
-        // Si el pedido fue correcto, reiniciar el temporizador
         if (ingredientesEstanCorrectos) {
             timer.stop();
             timer = new GameTimer(20, () -> {
@@ -190,19 +180,6 @@ public class CatBurgerShopModel {
         }
     }
 
-    public void borrarGatito(int v, int h) {
-        controller.borrarGatito(v, h);
-    }
-
-    public void dibujarGatito(int v, int h, int valor) {
-        controller.dibujarGatito(v, h, valor);
-        if (score < 0) {
-            gameOver = true;
-            gatoEnPantalla.pararGato();
-            controller.gameOver();
-        }
-    }
-
     public void executeLater(Runnable r, int ms) {
         controller.executeLater(r, ms);
     }
@@ -222,7 +199,6 @@ public class CatBurgerShopModel {
         opcionesHamburguesas.put("carnivora", Arrays.asList("pan", "carne", "carne", "carne", "pan"));
         opcionesHamburguesas.put("vegetariana", Arrays.asList("pan", "lechuga", "tomate", "palta", "pan"));
 
-        // Seleccionar un pedido aleatorio
         List<String> opciones = new ArrayList<>(opcionesHamburguesas.keySet());
         String pedidoAleatorio = opciones.get(new Random().nextInt(opciones.size()));
 
@@ -232,15 +208,6 @@ public class CatBurgerShopModel {
         pedido.addAll(opcionesHamburguesas.get(pedidoAleatorio));
 
         return pedido;
-    }
-
-
-    public void maullar() {
-        controller.maullar();
-    }
-
-    public void tabla() {
-        controller.tabla();
     }
 
     public void quitarPuntos() {

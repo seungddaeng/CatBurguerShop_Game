@@ -218,7 +218,6 @@ public class AndroidGameActivity extends Activity implements AndroidLibrary,
 			this.runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
-					// Tu código
 					TableRow row = (TableRow) table.getChildAt(vertical);
 					if (row == null) {
 						throw new IndexOutOfBoundsException("Wrong vertical coordinate " + vertical + ", actual range is (0,"+table.getChildCount()+")");
